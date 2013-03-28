@@ -1,27 +1,46 @@
 package serveur;
 
-import client.TchatClient;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class TchatServeur implements ITchatServeur
+public class TchatServeur extends UnicastRemoteObject implements ITchatServeur
 {
-    public TchatServeur()
+    private ArrayList<ITchatClient> list;
+    
+    public TchatServeur() throws RemoteException
     {
-        
+        this.list =  new ArrayList<>();
     }
     
-    public void register(TchatClient c) 
+    @Override
+    public void register(ITchatClient c) throws RemoteException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.list.add(c);
     }
-
-    public void dispatch(String msg) 
+    
+    @Override
+    public void dispatch(String msg) throws RemoteException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for(int i = 0; i < this.list.size(); i++)
+            this.list.get(i).receive(msg);
     }
     
     public static void main(String args[])
     {
-        
+        try 
+        {
+            ITchatServeur ts = new TchatServeur();
+            Naming.rebind("serveur", ts);
+            System.out.println("Serveur launched");
+        } 
+        catch (Exception e) 
+        {
+            Logger.getLogger(TchatServeur.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
     
 }
