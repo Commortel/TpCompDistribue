@@ -1,15 +1,18 @@
 package serveur;
 
+import java.io.Console;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import serveur.TchatServeur;
 
 public class TchatClient extends UnicastRemoteObject implements ITchatClient 
 {
     private ITchatServeur serveur;
+    private NewJFrame ihm;
     
     public TchatClient() throws RemoteException
     {
@@ -39,14 +42,11 @@ public class TchatClient extends UnicastRemoteObject implements ITchatClient
     @Override
     public void receive(String msg) throws RemoteException
     {
-        System.out.println(msg);
+        ihm.rec(msg);
     }
-    
-    public static void main(String args[]) throws RemoteException
-    {
-        ITchatClient tc = new TchatClient();
-        tc.connect("serveur");
-        //tc.send("Hello World");
+
+    public void ihm(NewJFrame aThis) {
+        ihm = aThis;
     }
 
 }

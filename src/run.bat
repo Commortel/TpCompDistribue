@@ -1,5 +1,6 @@
 javac -cp . serveur/*.java
 rmic -classpath . serveur.TchatServeur
-rmic -classpath . serveur.TchatClient
+rmic -classpath . serveur.NewFrame
 start rmiregistry
-java -cp . serveur.TchatServeur
+start java -cp . serveur.TchatServeur
+java -cp . serveur.NewFrame
